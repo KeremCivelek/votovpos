@@ -1,0 +1,163 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Ayarlar");
+    Layout = "~/Themes/Default/Modules/Admin/Shared/_Layout.cshtml";
+}
+
+<v-container fluid>
+    <v-row>
+        <v-col cols="12" sm="12" md="6" lg="4" xl="3">
+            <v-card tile outlined>
+                <v-card-title>@Html.Localize("Şifre Değiştir")</v-card-title>
+                <v-card-text>
+                    <v-form ref="frmchangePassword" novalidate="novalidate" v-on:submit.prevent>
+                        <v-container fluid>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field counter dense outlined hide-details
+                                                  label="@Html.Localize("Şu anki Şifreniz")"
+                                                  autocomplete="new-password"
+                                                  :append-icon="ChangePasswordData.ShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                                  v-bind:type="ChangePasswordData.ShowPassword ? 'text' : 'password'"
+                                                  v-on:click:append="ChangePasswordData.ShowPassword = !ChangePasswordData.ShowPassword"
+                                                  v-model="ChangePasswordData.CurrentPassword">
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field counter dense outlined hide-details
+                                                  label="@Html.Localize("Yeni Şifreniz")"
+                                                  autocomplete="new-password"
+                                                  :append-icon="ChangePasswordData.ShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                                  v-bind:type="ChangePasswordData.ShowPassword ? 'text' : 'password'"
+                                                  v-on:click:append="ChangePasswordData.ShowPassword = !ChangePasswordData.ShowPassword"
+                                                  v-model="ChangePasswordData.NewPassword1">
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field counter dense outlined hide-details
+                                                  label="@Html.Localize("Yeni Şifreniz (Tekrar)")"
+                                                  autocomplete="new-password"
+                                                  :append-icon="ChangePasswordData.ShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                                  v-bind:type="ChangePasswordData.ShowPassword ? 'text' : 'password'"
+                                                  v-on:click:append="ChangePasswordData.ShowPassword = !ChangePasswordData.ShowPassword"
+                                                  v-model="ChangePasswordData.NewPassword2">
+                                    </v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-row>
+                        <v-col></v-col>
+                        <v-col cols="auto">
+                            <v-btn tile outlined color="primary" v-on:click="cmd_change_password">
+                                <v-icon left>mdi-content-save</v-icon>
+                                @Html.Localize("Şifremi Değiştir")
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-actions>
+            </v-card>
+        </v-col>
+        <v-col>
+            <v-form ref="frmSettings" v-on:submit.prevent>
+                <v-card tile outlined>
+                    <v-card-title>@Html.Localize("Sistem Ayarları")</v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col>
+                                <fieldset class="settings-group">
+                                    <legend>@Html.Localize("Genel Ayarlar")</legend>
+                                    <v-row dense>
+                                        <v-col>
+                                            <v-text-field counter dense outlined hide-details
+                                                          label="@Html.Localize("str_application_title")"
+                                                          v-model="editItem.ApplicationTitle">
+                                            </v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row dense>
+                                        <v-col>
+                                            <v-combobox dense outlined hide-details
+                                                        label="@Html.Localize("str_current_theme")"
+                                                        v-bind:items="editItem.UsableThemes"
+                                                        v-model="editItem.CurrentTheme">
+                                            </v-combobox>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row dense>
+                                        <v-col>
+                                            <v-text-field counter dense outlined hide-details
+                                                          v-bind:type="'number'"
+                                                          label="@Html.Localize("str_default_login_timeout_minute")"
+                                                          v-model="editItem.SessionTimeoutMinute">
+                                            </v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row dense>
+                                        <v-col>
+                                            <v-text-field counter dense outlined hide-details
+                                                          label="@Html.Localize("str_cdn_url")"
+                                                          v-model="editItem.CdnUrl">
+                                            </v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row dense>
+                                        <v-col>
+                                            <v-select dense outlined hide-details
+                                                        label="@Html.Localize("str_default_home_url")"
+                                                        item-text="Text"
+                                                        item-value="Value"
+                                                        v-bind:items="editItem.AcceptableHomes"
+                                                        v-model="editItem.DefaultHome">
+                                            </v-select>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row dense>
+                                        <v-col>
+                                            <v-checkbox hide-details dense
+                                                        label="@Html.Localize("str_enable_debug")"
+                                                        color="primary"
+                                                        v-model="editItem.EnableDebug" />
+                                        </v-col>
+                                    </v-row>
+                                    <v-divider class="my-2"></v-divider>
+                                    <v-row dense class="my-1">
+                                        <v-col cols="auto">
+                                            <v-btn small tile outlined v-on:click="cmd_load_settings">
+                                                <v-icon left>mdi-reload</v-icon>
+                                                @Html.Localize("Sıfırla")
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col>
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            <v-btn small tile outlined v-on:click="cmd_save_settings">
+                                                <v-icon left>mdi-content-save</v-icon>
+                                                @Html.Localize("Kaydet")
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </fieldset>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-form>
+        </v-col>
+    </v-row>
+    @*<v-row>
+        <v-col>
+            <pre>{{editItem}}</pre>
+        </v-col>
+    </v-row>*@
+</v-container>
+
+@section scripts{
+    <script src="/Themes/Default/Modules/Admin/ui/js/settings.js"></script>
+}

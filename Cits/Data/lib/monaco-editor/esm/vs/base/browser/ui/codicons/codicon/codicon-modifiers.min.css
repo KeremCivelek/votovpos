@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v5.2.4.
+ * Original file: /npm/monaco-editor@0.33.0/esm/vs/base/browser/ui/codicons/codicon/codicon-modifiers.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.codicon-wrench-subaction{opacity:.5}@keyframes codicon-spin{100%{transform:rotate(360deg)}}.codicon-gear.codicon-modifier-spin,.codicon-loading.codicon-modifier-spin,.codicon-notebook-state-executing.codicon-modifier-spin,.codicon-sync.codicon-modifier-spin{animation:codicon-spin 1.5s steps(30) infinite}.codicon-modifier-disabled{opacity:.4}.codicon-loading,.codicon-tree-item-loading::before{animation-duration:1s!important;animation-timing-function:cubic-bezier(0.53,0.21,0.29,0.67)!important}
+/*# sourceMappingURL=/sm/7e7ccc06bce53489d3372e4fb5c1062fa2bece317b5d231a529a91e65778e5ad.map */

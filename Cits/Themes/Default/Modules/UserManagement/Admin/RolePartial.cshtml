@@ -1,0 +1,211 @@
+﻿﻿<v-card tile outlined elevation="2">
+    <v-overlay :absolute="true"
+               :opacity="0.90"
+               :value="role.loading"
+               :z-index="9"
+               color="brown darken-1">
+        <div class="lds-hourglass"></div>
+    </v-overlay>
+    <v-row>
+        <v-col>
+            <v-data-table dense light
+                          elevation="1"
+                          item-key="RoleId"
+                          v-bind:footer-props="Grid.footerProps"
+                          v-bind:items-per-page="Grid.itemsPerPage"
+                          v-bind:no-data-text="Grid.noDataText"
+                          v-bind:no-results-text="Grid.noResultText"
+                          v-bind:loading-text="Grid.loadingText"
+                          v-bind:headers="role.headers"
+                          v-bind:items="role.itemList"
+                          v-bind:loading="role.loading"
+                          v-bind:search="role.search">
+                <template v-slot:top>
+                    <v-system-bar dark color="brown darken-1">
+                        <v-btn x-small icon v-on:click="cmd_load_roles">
+                            <v-icon>mdi-refresh</v-icon>
+                        </v-btn>
+                        <v-divider inset vertical class="mx-2"></v-divider>
+                        <v-btn x-small outlined color="light-green lighten-1" v-on:click="cmd_add_role">
+                            <v-icon small>mdi-beaker-plus</v-icon>
+                            @Html.Localize("Yeni Rol Ekle")
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <input type="text" class="search-input"
+                               v-model="role.search"
+                               placeholder="@Html.Localize("Ara")"
+                               autocomplete="off" />
+                    </v-system-bar>
+                </template>
+
+
+
+
+                <template v-slot:item.fld_manage="{item}">
+                    <v-tooltip top color="brown darken-1">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_edit_role(item)">
+                                <v-icon small color="yellow darken-2">
+                                    mdi-pencil
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Düzenle")</span>
+                    </v-tooltip>
+                    <v-tooltip top color="brown darken-1">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_delete_role(item)">
+                                <v-icon small color="red darken-2">
+                                    mdi-delete
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Sil")</span>
+                    </v-tooltip>
+                    <v-tooltip top color="brown darken-1">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_role_details(item)">
+                                <v-icon small color="blue darken-2">
+                                    mdi-format-list-bulleted-square
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Detaylar")</span>
+                    </v-tooltip>
+                </template>
+            </v-data-table>
+        </v-col>
+    </v-row>
+</v-card>
+<v-dialog scrollable transition="dialog-top-transition" max-width="600" v-model="role.editMode">
+    <v-card>
+        <v-system-bar dark color="brown darken-1">
+            <span v-if="!role.editItem.editmode">@Html.Localize("Yeni Rol Ekle")</span>
+            <span v-if="role.editItem.editmode">@Html.Localize("Rol Düzenle")</span>
+            <v-spacer></v-spacer>
+            <v-btn text small v-on:click="role.editMode = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-system-bar>
+        <v-card-text>
+            <v-form ref="frmRole" v-on:submit.prevent v-model="role.editItem.isvalid">
+                <v-container fluid class="mt-3">
+                    <v-row>
+                        <v-col>
+                            <v-text-field counter dense outlined
+                                          v-bind:disabled="role.editItem.editmode"
+                                          v-bind:rules="role.editItem.RoleId_rules"
+                                          v-bind:type="'number'"
+                                          label="@Html.Localize("Rol No")"
+                                          v-model="role.editItem.RoleId">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-text-field counter dense outlined
+                                          label="@Html.Localize("Rol Adı")"
+                                          autocomplete="new-user"
+                                          v-bind:rules="role.editItem.RoleName_rules"
+                                          v-model="role.editItem.RoleName">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col></v-col>
+                        <v-col cols="auto">
+
+                        </v-col>
+                        <v-col cols="auto">
+                            <v-btn tile outlined color="primary" v-on:click="cmd_save_role">
+                                <v-icon left>mdi-content-save</v-icon>
+                                @Html.Localize("Kaydet")
+                            </v-btn>
+                        </v-col>
+                        <v-col></v-col>
+                    </v-row>
+                </v-container>
+            </v-form>
+        </v-card-text>
+    </v-card>
+</v-dialog>
+<v-dialog scrollable transition="dialog-bottom-transition" max-width="800" v-model="role.detailMode">
+    <v-card>
+        <v-system-bar dark color="brown darken-1">
+            <span>@Html.Localize("Rol Yetkileri")</span>
+            <v-spacer></v-spacer>
+            <v-btn text small v-on:click="role.detailMode = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-system-bar>
+        <v-card-text>
+            <v-container fluid>
+                <v-row>
+                    <v-col>
+                        <v-data-table dense light
+                                      elevation="1"
+                                      @*item-key="ModuleRolePermissionId"*@
+                                      v-bind:footer-props="Grid.footerProps"
+                                      v-bind:items-per-page="Grid.itemsPerPage"
+                                      v-bind:no-data-text="Grid.noDataText"
+                                      v-bind:no-results-text="Grid.noResultText"
+                                      v-bind:loading-text="Grid.loadingText"
+                                      v-bind:headers="role.detailheaders"
+                                      v-bind:items="role.detailItems"
+                                      v-bind:search="role.detailsearch">
+                            <template v-slot:top>
+                                <v-system-bar dark color="brown darken-1">
+                                    <v-btn x-small outlined color="light-green lighten-1" v-on:click="cmd_role_details_save">
+                                        <v-icon small>mdi-content-save</v-icon>
+                                        @Html.Localize("Kaydet")
+                                    </v-btn>
+                                    <v-spacer></v-spacer>
+                                    <input type="text" class="search-input"
+                                           v-model="role.detailsearch"
+                                           placeholder="@Html.Localize("Ara")"
+                                           autocomplete="off" />
+                                </v-system-bar>
+                            </template>
+
+                            <template slot="item.PermissionDisplayName" slot-scope="{item}">
+                                <span class="caption">{{item.PermissionDisplayName}}</span>
+                            </template>
+
+                            <template slot="item.Create" slot-scope="{item}">
+                                <v-checkbox hide-details dense
+                                            color="primary"
+                                            v-model="item.Create" />
+                            </template>
+                            <template slot="item.Read" slot-scope="{item}">
+                                <v-checkbox hide-details dense
+                                            color="primary"
+                                            v-model="item.Read" />
+                            </template>
+                            <template slot="item.Update" slot-scope="{item}">
+                                <v-checkbox hide-details dense
+                                            color="primary"
+                                            v-model="item.Update" />
+                            </template>
+                            <template slot="item.Delete" slot-scope="{item}">
+                                <v-checkbox hide-details dense
+                                            color="primary"
+                                            v-model="item.Delete" />
+                            </template>
+
+                        </v-data-table>
+                    </v-col>
+                </v-row>
+            </v-container>
+
+        </v-card-text>
+    </v-card>
+</v-dialog>

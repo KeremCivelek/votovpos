@@ -1,0 +1,196 @@
+﻿﻿<v-card tile outlined elevation="2">
+    <v-overlay :absolute="true"
+               :opacity="0.90"
+               :value="group.loading"
+               :z-index="9"
+               color="orange darken-2">
+        <div class="lds-hourglass"></div>
+    </v-overlay>
+    <v-row>
+        <v-col>
+            <v-data-table dense light
+                          elevation="1"
+                          item-key="GroupId"
+                          v-bind:footer-props="Grid.footerProps"
+                          v-bind:items-per-page="Grid.itemsPerPage"
+                          v-bind:no-data-text="Grid.noDataText"
+                          v-bind:no-results-text="Grid.noResultText"
+                          v-bind:loading-text="Grid.loadingText"
+                          v-bind:headers="group.headers"
+                          v-bind:items="group.itemList"
+                          v-bind:loading="group.loading"
+                          v-bind:search="group.search">
+                <template v-slot:top>
+                    <v-system-bar dark color="orange darken-2">
+                        <v-btn x-small icon v-on:click="cmd_load_groups">
+                            <v-icon>mdi-refresh</v-icon>
+                        </v-btn>
+                        <v-divider inset vertical class="mx-2"></v-divider>
+                        <v-btn x-small color="primary" v-on:click="cmd_add_group">
+                            <v-icon small>mdi-beaker-plus</v-icon>
+                            @Html.Localize("Yeni Grup Ekle")
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <input type="text" class="search-input"
+                               v-model="group.search"
+                               placeholder="@Html.Localize("Ara")"
+                               autocomplete="off" />
+                    </v-system-bar>
+                </template>
+
+
+                <template v-slot:item.fld_manage="{item}">
+                    <v-tooltip top color="orange darken-2">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_edit_group(item)">
+                                <v-icon small color="yellow darken-2">
+                                    mdi-pencil
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Düzenle")</span>
+                    </v-tooltip>
+                    <v-tooltip top color="orange darken-2">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_delete_group(item)">
+                                <v-icon small color="red darken-2">
+                                    mdi-delete
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Sil")</span>
+                    </v-tooltip>
+                    <v-tooltip top color="orange darken-2">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_group_details(item)">
+                                <v-icon small color="blue darken-2">
+                                    mdi-format-list-bulleted-square
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Detaylar")</span>
+                    </v-tooltip>
+                </template>
+
+            </v-data-table>
+        </v-col>
+    </v-row>
+</v-card>
+<v-dialog scrollable transition="dialog-top-transition" max-width="600" v-model="group.editMode">
+    <v-card>
+        <v-system-bar dark color="orange darken-2">
+            <span v-if="!group.editItem.editmode">@Html.Localize("Yeni Grup Ekle")</span>
+            <span v-if="group.editItem.editmode">@Html.Localize("Grup Düzenle")</span>
+            <v-spacer></v-spacer>
+            <v-btn text small v-on:click="group.editMode = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-system-bar>
+        <v-card-text>
+            <v-form ref="frmGroup" v-on:submit.prevent v-model="group.editItem.isvalid">
+                <v-container fluid class="mt-3">
+                    <v-row>
+                        <v-col>
+                            <v-text-field counter dense outlined
+                                          v-bind:disabled="group.editItem.editmode"
+                                          v-bind:rules="group.editItem.GroupId_rules"
+                                          v-bind:type="'number'"
+                                          label="@Html.Localize("Grup No")"
+                                          v-model="group.editItem.GroupId">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-text-field counter dense outlined
+                                          label="@Html.Localize("Grup Adı")"
+                                          autocomplete="new-user"
+                                          v-bind:rules="group.editItem.GroupName_rules"
+                                          v-model="group.editItem.GroupName">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col></v-col>
+                        <v-col cols="auto">
+
+                        </v-col>
+                        <v-col cols="auto">
+                            <v-btn tile outlined color="primary" v-on:click="cmd_save_group">
+                                <v-icon left>mdi-content-save</v-icon>
+                                @Html.Localize("Kaydet")
+                            </v-btn>
+                        </v-col>
+                        <v-col></v-col>
+                    </v-row>
+
+                </v-container>
+            </v-form>
+        </v-card-text>
+    </v-card>
+</v-dialog>
+<v-dialog scrollable transition="dialog-bottom-transition" max-width="800" v-model="group.detailMode">
+    <v-card>
+        <v-system-bar dark color="orange darken-2">
+            <span>@Html.Localize("Grup Rolleri")</span>
+            <v-spacer></v-spacer>
+            <v-btn text small v-on:click="group.detailMode = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-system-bar>
+        <v-card-text>
+            <v-container>
+                <v-row>
+                    <v-col>
+                        <v-simple-table dense>
+                            <template v-slot:default>
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">
+                                            @Html.Localize("Rol Adı")
+                                        </th>
+                                        <th class="text-cleft">
+                                            @Html.Localize("Üye")
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(ugr,i) in group.detailItems" :key="i">
+                                        <td>{{ ugr.RoleName }}</td>
+                                        <td>
+                                            <v-checkbox hide-details dense
+                                                        color="primary"
+                                                        v-model="ugr.Member" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </template>
+                        </v-simple-table>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        
+                    </v-col>
+                    <v-col cols="auto">
+                        <v-btn tile small outlined color="primary" v-on:click="cmd_group_details_save">
+                            <v-icon left>mdi-content-save</v-icon>
+                            @Html.Localize("Kaydet")
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-card-text>
+    </v-card>
+</v-dialog>
+
+

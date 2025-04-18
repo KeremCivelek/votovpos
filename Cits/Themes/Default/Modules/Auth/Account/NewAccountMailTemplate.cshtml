@@ -1,0 +1,15 @@
+﻿﻿@model MC.WebApp.Module.Auth.NewAccountMailTemplateViewModel
+
+
+
+<div>
+    Sayın @Model.NameSurname
+</div>
+
+<div>
+    Hesabınız aktif edilmiş olup geçici şifreniz : <b>@Model.Password</b> olarak belirlenmiştir
+</div>
+
+<div>
+    Giriş yapmak için <a href="@Model.LoginUrl">@Model.LoginUrl</a> 
+</div>

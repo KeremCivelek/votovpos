@@ -1,0 +1,65 @@
+﻿.login-error-container {
+    padding: 10px;
+    background-color: #ff474730;
+    border-radius: 2px;
+    border-top: 5px solid #ff474799;
+}
+
+
+    .login-error-container .login-error-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .login-error-container .login-error-row .login-error-left {
+            flex-grow: 2;
+            text-align: center;
+        }
+
+        .login-error-container .login-error-row .login-error-right {
+            flex-grow: 10;
+        }
+
+
+            .login-error-container .login-error-row .login-error-right span {
+                font-size: 0.9rem;
+                font-family: sans-serif;
+                color: #644f4f;
+                font-weight: 550
+            }
+
+
+.login-return-button-container {
+    background-color: #0876ff99;
+    width: 140px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-family: sans-serif;
+    display: flex;
+}
+
+    .login-return-button-container:hover {
+        background-color: #0876ff;
+        cursor: pointer;
+    }
+
+    .login-return-button-container a {
+        text-decoration: none;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        color: #f3f3f3;
+    }
+
+@media only screen and (max-width : 667px) {
+    .login-error-container .login-error-row {
+        flex-direction: column;
+    }
+
+        .login-error-container .login-error-row .login-error-right {
+            margin-top: 15px
+        }
+}

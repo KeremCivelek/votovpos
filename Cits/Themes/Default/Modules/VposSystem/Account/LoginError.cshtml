@@ -1,0 +1,33 @@
+﻿﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="/Themes/Default/Modules/VposSystem/ui/css/Account/LoginError.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giriş Hata Sayfası</title>
+</head>
+<body>
+    <div class="login-return-button-container">
+        <svg filter="invert(94%) sepia(6%) saturate(9%) hue-rotate(29deg) brightness(107%) contrast(100%)" id="Layer_1" version="1.1" viewBox="0 -100 512 512" height="30px" width="40px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 " /></svg>
+        <a href="@Url.Action("Index","Default",ViewBag.Lang)" class="login-return-button">
+            @LanguageManager.Localize("str_back", ViewBag.Lang)
+        </a>
+    </div>
+    <div class="login-error-container">
+        <div class="login-error-row">
+            <div class="login-error-left">
+                <svg height="32" style="overflow:visible;enable-background:new 0 0 32 32" viewBox="0 0 32 32" width="32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><g id="Error_1_"><g id="Error"><circle cx="16" cy="16" id="BG" r="16" style="fill:#D72828;" /><path d="M14.5,25h3v-3h-3V25z M14.5,6v13h3V6H14.5z" id="Exclamatory_x5F_Sign" style="fill:#E6E6E6;" /></g></g></g></svg>
+            </div>
+            <div class="login-error-right">
+                <span>
+                    @LanguageManager.Localize("msg_invalid_token_or_id_number", ViewBag.Lang)
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

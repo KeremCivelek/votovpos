@@ -1,0 +1,15 @@
+﻿.app-bar {
+    background-image: var(--app-bar-bg);
+    background-repeat: repeat;
+}
+
+.main {
+    background-image: var(--main-bg);
+    background-repeat: repeat;
+}
+
+
+fieldset.settings-group {
+    padding: 15px;
+    border: 1px solid #cbcbcb;
+}

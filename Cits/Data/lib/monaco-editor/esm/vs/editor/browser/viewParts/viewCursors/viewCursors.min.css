@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v5.2.4.
+ * Original file: /npm/monaco-editor@0.33.0/esm/vs/editor/browser/viewParts/viewCursors/viewCursors.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.monaco-editor .cursors-layer{position:absolute;top:0}.monaco-editor .cursors-layer>.cursor{position:absolute;overflow:hidden}.monaco-editor .cursors-layer.cursor-smooth-caret-animation>.cursor{transition:all 80ms}.monaco-editor .cursors-layer.cursor-block-outline-style>.cursor{box-sizing:border-box;background:0 0!important;border-style:solid;border-width:1px}.monaco-editor .cursors-layer.cursor-underline-style>.cursor{border-bottom-width:2px;border-bottom-style:solid;background:0 0!important;box-sizing:border-box}.monaco-editor .cursors-layer.cursor-underline-thin-style>.cursor{border-bottom-width:1px;border-bottom-style:solid;background:0 0!important;box-sizing:border-box}@keyframes monaco-cursor-smooth{0%,20%{opacity:1}100%,60%{opacity:0}}@keyframes monaco-cursor-phase{0%,20%{opacity:1}100%,90%{opacity:0}}@keyframes monaco-cursor-expand{0%,20%{transform:scaleY(1)}100%,80%{transform:scaleY(0)}}.cursor-smooth{animation:monaco-cursor-smooth .5s ease-in-out 0s 20 alternate}.cursor-phase{animation:monaco-cursor-phase .5s ease-in-out 0s 20 alternate}.cursor-expand>.cursor{animation:monaco-cursor-expand .5s ease-in-out 0s 20 alternate}
+/*# sourceMappingURL=/sm/c6c7575ccc5fb33fbfd931b834e998dec103b2bb7b3b0536e1d1e99c7d080f40.map */

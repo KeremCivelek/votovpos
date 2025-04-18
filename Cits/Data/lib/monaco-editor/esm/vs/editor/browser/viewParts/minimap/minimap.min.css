@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v5.2.4.
+ * Original file: /npm/monaco-editor@0.33.0/esm/vs/editor/browser/viewParts/minimap/minimap.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.monaco-editor .minimap.slider-mouseover .minimap-slider{opacity:0;transition:opacity .1s linear}.monaco-editor .minimap.slider-mouseover:hover .minimap-slider{opacity:1}.monaco-editor .minimap.slider-mouseover .minimap-slider.active{opacity:1}.monaco-editor .minimap-shadow-hidden{position:absolute;width:0}.monaco-editor .minimap-shadow-visible{position:absolute;left:-6px;width:6px}.monaco-editor.no-minimap-shadow .minimap-shadow-visible{position:absolute;left:-1px;width:1px}
+/*# sourceMappingURL=/sm/d82184328ae8009abced61061bfd093839a83a7419afeff2b4496975924a3bc8.map */

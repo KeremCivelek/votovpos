@@ -1,0 +1,25 @@
+﻿﻿@{
+    ViewBag.Title = Html.Localize("Kullanıcı Girişi");
+    Layout = "~/Themes/Default/Modules/Auth/Shared/_LayoutPublic.cshtml";
+    var settings = ViewBag.Settings as MC.WebApp.Module.Auth.SettingsViewModel;
+}
+
+<v-container fluid fill-height>
+    <v-layout column>
+        <v-flex></v-flex>
+        <v-flex grow shrink>
+            <v-row>
+                <v-col col="1"></v-col>
+                <v-col cols="auto">
+                    @Html.GetRenderedAction("Account", "RegisterPartial", AuthModule.ThisModule.ModuleStarter.AreaName)
+                </v-col>
+                <v-col></v-col>
+            </v-row>
+        </v-flex>
+        <v-flex></v-flex>
+    </v-layout>
+</v-container>
+
+@section scripts{
+    <script src="/Themes/Default/Modules/Auth/UI/js/Account/register.js"></script>
+}

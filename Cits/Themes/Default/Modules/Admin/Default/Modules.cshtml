@@ -1,0 +1,151 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Modüller");
+    Layout = "~/Themes/Default/Modules/Admin/Shared/_Layout.cshtml";
+}
+
+<v-container fluid v-if="!manageMode">
+    <v-row>
+        <v-col>
+            <v-data-table dense light elevation="1"
+                          v-bind:footer-props="Grid.footerProps"
+                          v-bind:items-per-page="Grid.itemsPerPage"
+                          v-bind:no-data-text="Grid.noDataText"
+                          v-bind:no-results-text="Grid.noResultText"
+                          v-bind:loading-text="Grid.loadingText"
+                          v-bind:headers="headers"
+                          v-bind:items="itemList"
+                          item-key="ModuleId"
+                          v-bind:loading="loading"
+                          v-bind:search="search">
+                <template v-slot:top>
+                    <v-toolbar dense flat dark color="brown darken-4">
+                        <v-btn small icon v-on:click="cmd_load_modules">
+                            <v-icon>mdi-refresh</v-icon>
+                        </v-btn>
+                        <v-divider vertical class="mx-2"></v-divider>
+                        <v-spacer></v-spacer>
+                        <v-sheet max-width="250">
+                            <v-text-field dense flat solo hide-details clearable light
+                                          autocomplete="off"
+                                          class="default-bg"
+                                          append-icon="mdi-table-search"
+                                          v-model="search"
+                                          placeholder="Ara">
+                            </v-text-field>
+                        </v-sheet>
+                    </v-toolbar>
+                </template>
+
+                <template slot="item.ModuleName" slot-scope="{item}">
+                    <v-btn text small class="no-transform"
+                           v-bind:disabled="!item.IsManageable"
+                           v-on:click="cmd_manage_module(item)">
+                        <span>{{item.ModuleName}}</span>
+                    </v-btn>
+                </template>
+                <template slot="item.IsDirectReferenced" slot-scope="{item}">
+                    <span v-if="item.IsDirectReferenced">@Html.Localize("Evet")</span>
+                    <span v-else>@Html.Localize("Hayır")</span>
+                </template>
+                <template slot="item.AutoInstall" slot-scope="{item}">
+                    <span v-if="item.AutoInstall">@Html.Localize("Evet")</span>
+                    <span v-else>@Html.Localize("Hayır")</span>
+                </template>
+                <template slot="item.Installed" slot-scope="{item}">
+                    <span v-if="item.Installed">@Html.Localize("Evet")</span>
+                    <span v-else>@Html.Localize("Hayır")</span>
+                </template>
+
+                <template v-slot:item.fld_manage="{item}">
+                    <v-toolbar flat dense color="transparent">
+                        @if (User.HasPermission(AdminModule.PERMISSION_ADMIN_MODULES, ePermission.Update))
+                        {
+                            <v-divider vertical inset class="mx-2"></v-divider>
+                            <v-btn x-small outlined color="success"
+                                   v-if="item.CanInstall"
+                                   v-bind:disabled="fnk_module_install_uninstall(item,'i')"
+                                   v-on:click="cmd_install_module(item)">
+                                <v-icon small>mdi-puzzle-plus</v-icon>
+                                <span class="d-none d-md-inline">@Html.Localize("Kurulum Yap")</span>
+                            </v-btn>
+                        }
+
+                        @if (User.HasPermission(AdminModule.PERMISSION_ADMIN_MODULES, ePermission.Delete))
+                        {
+                            <v-divider vertical inset class="mx-2"></v-divider>
+                            <v-btn x-small outlined color="danger"
+                                   v-if="item.CanUninstall"
+                                   v-bind:disabled="fnk_module_install_uninstall(item,'u')"
+                                   v-on:click="cmd_uninstall_module(item)">
+                                <v-icon small>mdi-puzzle-remove</v-icon>
+                                <span class="d-none d-md-inline">@Html.Localize("Kurulumu Kaldır")</span>
+                            </v-btn>
+                        }
+                    </v-toolbar>
+                </template>
+            </v-data-table>
+        </v-col>
+    </v-row>
+</v-container>
+
+<v-dialog hide-overlay fullscreen transition="dialog-bottom-transition" v-model="manageMode">
+    <v-overlay :absolute="true"
+               :opacity="0.99"
+               :value="manageLoading"
+               :z-index="9999"
+               color="grey darken-2">
+        <div class="lds-hourglass"></div>
+    </v-overlay>
+    <v-card tile elevation="0" class="d-flex">
+        <v-layout column>
+            <v-flex grow shrink>
+                <v-system-bar dense flat dark color="teal darken-4">
+                    <span class="caption">{{manageTitle}}</span>
+                    <v-spacer></v-spacer>
+                    <v-btn x-small v-on:click="cmd_return_module_list">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-system-bar>
+            </v-flex>
+            <v-flex>
+                <iframe frameborder="0" v-bind:src="manageUrl" class="d-flex w-100p h-100p" v-on:load="manageLoading = false">
+                </iframe>
+            </v-flex>
+        </v-layout>
+
+    </v-card>
+    @*<v-container fluid fill-height class="py-0">
+            <v-layout column class="white">
+                <v-flex grow shrink>
+                    <v-toolbar dense flat dark color="teal darken-4">
+                        <v-toolbar-title>{{manageTitle}}</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn small v-on:click="cmd_return_module_list">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-toolbar>
+                </v-flex>
+                <v-flex>
+                    <v-overlay :absolute="true"
+                               :opacity="0.90"
+                               :value="manageLoading"
+                               :z-index="9999"
+                               color="grey darken-2">
+                        <div class="lds-hourglass"></div>
+                    </v-overlay>
+                    <iframe frameborder="0" v-bind:src="manageUrl" class="w-100p h-100p">
+                    </iframe>
+                </v-flex>
+                <v-flex grow shrink>&nbsp;</v-flex>
+            </v-layout>
+        </v-container>*@
+</v-dialog>
+
+@section appbar{
+
+}
+
+@section scripts{
+    <script src="/Themes/Default/Modules/Admin/ui/js/modules.js"></script>
+}

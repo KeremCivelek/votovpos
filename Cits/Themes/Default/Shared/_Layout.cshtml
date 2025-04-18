@@ -1,0 +1,41 @@
+@{
+    var debug = Html.IsDebugMode();
+    var cdn = @ViewBag.CdnUrl;
+    var user = User.GetUserInfo();
+}
+
+
+<!DOCTYPE html>
+<html lang="@ViewBag.Lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="@cdn/lib/bootstrap4/css/bootstrap.min.css" />
+    <link href="~/Themes/Default/UI/css/general.css" rel="stylesheet" />
+    <link href="@cdn/lib/bootstrap4/css/bootstrap.min.css" rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
+
+    <script src="@Url.GetUrl("Models")"></script>
+    <script src="@Url.GetUrl("Enums")"></script>
+
+</head>
+<body class="">
+
+    <div class="container">
+        @RenderBody()
+    </div>
+    
+    <script src="@cdn/lib/jquery/jquery.min.js"></script>
+    <script src="@cdn/lib/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="@cdn/lib/SignalRJS/jquery.signalR-2.4.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

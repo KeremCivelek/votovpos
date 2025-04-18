@@ -1,0 +1,257 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Yerelleştirme Sayfası");
+    Layout = "~/Themes/Default/Modules/Localization/Shared/_Layout.cshtml";
+}
+
+<v-container fluid fill-height>
+    <v-layout column>
+        <v-flex class="grow-shrink-0">
+            <v-card tile outlined elevation="2">
+                <v-container fluid>
+                    <v-row v-if="editMode">
+                        <v-col>
+                            <v-form ref="frmLanguage" v-on:submit.prevent v-model="editItem.isvalid">
+                                <v-row dense>
+                                    <v-col>
+                                        <v-text-field counter dense outlined hide-details
+                                                      v-bind:disabled="true"
+                                                      v-bind:type="'number'"
+                                                      label="@Html.Localize("Dil No")"
+                                                      v-model="editItem.LanguageId">
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col>
+                                        <v-text-field counter dense outlined hide-details
+                                                      label="@Html.Localize("Dil Kodu")"
+                                                      v-bind:rules="editItem.LanguageCode_rules"
+                                                      v-model="editItem.LanguageCode">
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col>
+                                        <v-text-field counter dense outlined hide-details
+                                                      label="@Html.Localize("Dil Adı")"
+                                                      v-bind:rules="editItem.LanguageName_rules"
+                                                      v-model="editItem.LanguageName">
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col>
+                                        <v-combobox dense outlined hide-details
+                                                    label="@Html.Localize("Dil Simgesi")"
+                                                    v-bind:items="FlagIcons"
+                                                    v-model="editItem.Flag">
+                                            <template v-slot:selection="{ attrs, item, select, selected }">
+                                                <span>
+                                                    <span class="text-h6">
+                                                        <span v-bind:class="item"></span>
+                                                    </span> &nbsp;
+                                                    <span>{{item}}</span>
+                                                </span>
+                                            </template>
+                                            <template v-slot:item="{ attrs, on, item, parent}">
+                                                <span>
+                                                    <span class="text-h6">
+                                                        <span v-bind:class="item"></span>
+                                                    </span> &nbsp;
+                                                    <span>{{item}}</span>
+                                                </span>
+                                            </template>
+                                        </v-combobox>
+                                    </v-col>
+                                </v-row>
+
+
+
+                                <v-row dense>
+                                    <v-col>
+                                        <v-checkbox hide-details dense
+                                                    label="@Html.Localize("Aktif")"
+                                                    color="primary"
+                                                    v-model="editItem.IsActive" />
+                                    </v-col>
+                                </v-row>
+                                <v-row dense>
+                                    <v-col>
+                                        <v-checkbox hide-details dense
+                                                    v-bind:disabled="!editItem.IsActive"
+                                                    label="@Html.Localize("Varsayılan Dil")"
+                                                    color="primary"
+                                                    v-model="editItem.IsDefault" />
+                                    </v-col>
+                                </v-row>
+                                <v-divider class="my-4"></v-divider>
+                                <v-row dense>
+                                    <v-col>
+                                        <v-btn small tile outlined v-on:click="cmd_back">
+                                            <v-icon left>mdi-arrow-left</v-icon>
+                                            @Html.Localize("Geri")
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col class="text-right">
+                                        <v-btn small tile outlined v-on:click="cmd_saveLanguage">
+                                            <v-icon left>mdi-content-save</v-icon>
+                                            @Html.Localize("Kaydet")
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-col>
+                    </v-row>
+                    <v-row v-if="!editMode">
+                        <v-col>
+                            <v-data-table dense light elevation="1"
+                                          v-bind:footer-props="Grid.footerProps"
+                                          v-bind:items-per-page="Grid.itemsPerPage"
+                                          v-bind:no-data-text="Grid.noDataText"
+                                          v-bind:no-results-text="Grid.noResultText"
+                                          v-bind:loading-text="Grid.loadingText"
+                                          v-bind:headers="headers"
+                                          v-bind:items="itemList"
+                                          item-key="LanguageId"
+                                          v-bind:loading="loading"
+                                          v-bind:search="search">
+                                <template v-slot:top>
+                                    <v-toolbar dense flat dark color="#263238">
+                                        <v-btn small icon v-on:click="cmd_load_languages">
+                                            <v-icon>mdi-refresh</v-icon>
+                                        </v-btn>
+                                        <v-divider vertical class="mx-2"></v-divider>
+                                        <v-btn tile small color="primary" v-on:click="cmd_add_language">
+                                            @Html.Localize("Yeni Dil Ekle")
+                                            <v-icon>
+                                                mdi-plus
+                                            </v-icon>
+                                        </v-btn>
+                                        <v-divider vertical class="mx-2"></v-divider>
+                                        <v-btn tile small color="secondary" v-on:click="cmd_refresh_language_cache">
+                                            @Html.Localize("Dil Önbelleğini Yenile")
+                                            <v-icon>
+                                                mdi-refresh-auto
+                                            </v-icon>
+                                        </v-btn>
+                                        <v-spacer></v-spacer>
+                                        <v-sheet max-width="250">
+                                            <v-text-field dense flat solo hide-details clearable light
+                                                          autocomplete="off"
+                                                          class="default-bg"
+                                                          append-icon="mdi-table-search"
+                                                          v-model="search"
+                                                          placeholder="@Html.Localize("Ara")">
+                                            </v-text-field>
+                                        </v-sheet>
+                                    </v-toolbar>
+                                </template>
+
+
+                                <template slot="item.Flag" slot-scope="{item}">
+                                    <span v-bind:class="item.Flag"></span>
+                                </template>
+                                <template slot="item.LanguageCode" slot-scope="{item}">
+                                    <span class="caption">{{item.LanguageCode}}</span>
+                                </template>
+                                <template slot="item.LanguageName" slot-scope="{item}">
+                                    <v-btn text small v-on:click="cmd_getwords(item)">
+                                        {{item.LanguageName}}
+                                    </v-btn>
+                                </template>
+
+                                <template slot="item.IsActive" slot-scope="{item}">
+                                    <span v-if="item.IsActive">@Html.Localize("Evet")</span>
+                                    <span v-else>@Html.Localize("Hayır")</span>
+                                </template>
+                                <template slot="item.IsDefault" slot-scope="{item}">
+                                    <span v-if="item.IsDefault">@Html.Localize("Evet")</span>
+                                    <span v-else>@Html.Localize("Hayır")</span>
+                                </template>
+
+                                <template v-slot:item.fld_manage="{item}">
+                                    <v-toolbar flat dense color="transparent">
+                                        <v-btn small icon class="mx-1" v-on:click="cmd_edit_language(item)">
+                                            <v-icon color="yellow darken-2">
+                                                mdi-pencil
+                                            </v-icon>
+                                        </v-btn>
+                                        <v-btn small icon class="mx-1" v-on:click="cmd_delete_language(item)">
+                                            <v-icon color="red">
+                                                mdi-delete
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-toolbar>
+                                </template>
+
+                            </v-data-table>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card>
+        </v-flex>
+        <v-flex>
+            <v-card tile outlined elevation="2" class="w-100p h-100p">
+                <v-data-table dense light elevation="1"
+                              v-bind:footer-props="Grid.footerProps"
+                              v-bind:items-per-page="Grid.itemsPerPage"
+                              v-bind:no-data-text="Grid.noDataText"
+                              v-bind:no-results-text="Grid.noResultText"
+                              v-bind:loading-text="Grid.loadingText"
+                              v-bind:headers="wordsHeaders"
+                              v-bind:items="wordList"
+                              item-key="LanguageWordId"
+                              v-bind:loading="wordsLoading"
+                              v-bind:search="wordSearch">
+                    <template v-slot:top>
+                        <v-toolbar dense flat dark color="blue-grey darken-1">
+                            <v-toolbar-title>{{wordsTitle}} @Html.Localize("Kelimeler")</v-toolbar-title>
+                            <v-divider vertical class="mx-2"></v-divider>
+
+                            <v-spacer></v-spacer>
+                            <v-sheet max-width="250">
+                                <v-text-field dense flat solo hide-details clearable light
+                                              autocomplete="off"
+                                              class="default-bg"
+                                              append-icon="mdi-table-search"
+                                              v-model="wordSearch"
+                                              placeholder="@Html.Localize("Ara")">
+                                </v-text-field>
+                            </v-sheet>
+                        </v-toolbar>
+                    </template>
+
+
+                    <template slot="item.LanguageWordId" slot-scope="{item}">
+                        <span class="caption">{{item.LanguageWordId}}</span>
+                    </template>
+                    <template slot="item.WordCode" slot-scope="{item}">
+                        <span class="caption">{{item.WordCode}}</span>
+                    </template>
+                    <template slot="item.WordResult" slot-scope="{item}">
+                        <v-text-field counter dense outlined hide-details
+                                      v-bind:disabled="wordsLoading"
+                                      v-model="item.WordResult">
+                        </v-text-field>
+                    </template>
+
+                    <template v-slot:item.fld_manage="{item}">
+                        <v-btn small 
+                               v-bind:disabled="wordsLoading" 
+                               v-on:click="cmd_save_word(item)">
+                            <v-icon color="blue lighten-1">mdi-content-save</v-icon>
+                            @Html.Localize("Kaydet")
+                        </v-btn>
+                    </template>
+
+                </v-data-table>
+            </v-card>
+        </v-flex>
+    </v-layout>
+</v-container>
+
+
+@section scripts{
+    <script src="/Themes/Default/Modules/Localization/ui/js/admin.js"></script>
+}

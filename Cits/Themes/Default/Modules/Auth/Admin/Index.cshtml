@@ -1,0 +1,96 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Oturum Modülü Yönetim");
+    Layout = "~/Themes/Default/Modules/Auth/Shared/_Layout.cshtml";
+}
+
+<v-container>
+    <v-row>
+        <v-col>
+            <ul>
+                <li>Toplam Kullanıcı sayısı</li>
+                <li>Aktif Kullanıcı Sayısı</li>
+                <li>Aktivasyon Bekleyen Sayısı</li>
+                <li></li>
+                <li>Oturumu açık kullanıcılar</li>
+
+            </ul>
+        </v-col>
+    </v-row>
+</v-container>
+
+@*<v-container fluid>
+    <v-row>
+        <v-col cols="12" sm="12" md="6" lg="4" xl="3">
+            <v-card tile outlined elevation="2">
+                <v-overlay :absolute="true"
+                           :opacity="0.90"
+                           :value="settings.loading"
+                           :z-index="9"
+                           color="grey darken-2">
+                    <div class="lds-hourglass"></div>
+                </v-overlay>
+                <v-system-bar dark color="orange darken-2">
+                    <v-btn x-small icon v-on:click="cmd_load_settings">
+                        <v-icon>mdi-refresh</v-icon>
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <span>@Html.Localize("Ayarlar")</span>
+                </v-system-bar>
+
+                <v-container fluid>
+                    <v-row>
+                        <v-col>
+                            <v-checkbox dense
+                                        label="@Html.Localize("Beni Hatırla Aktif")"
+                                        color="primary"
+                                        v-model="settings.editItem.EnableRememberMe" />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-checkbox dense
+                                        label="@Html.Localize("Yeni Kullanıcı Kaydı Aktif")"
+                                        color="primary"
+                                        v-model="settings.editItem.EnableSelfRegistration" />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-checkbox dense
+                                        label="@Html.Localize("Kullanıcı Adı Mail Adresi olmalıdır")"
+                                        color="primary"
+                                        v-model="settings.editItem.UsernameMustBeEmail" />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-checkbox dense
+                                        label="@Html.Localize("Şifremi Unuttum Aktif")"
+                                        color="primary"
+                                        v-model="settings.editItem.EnableForgotPassword" />
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                        </v-col>
+                        <v-col cols="auto">
+                            <v-btn tile small outlined color="primary" v-on:click="cmd_save_settings">
+                                <v-icon left>mdi-content-save</v-icon>
+                                @Html.Localize("Kaydet")
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4" xl="3">
+
+        </v-col>
+    </v-row>
+</v-container>*@
+
+@section scripts{
+    <script src="/Themes/Default/Modules/Auth/UI/js/admin.js"></script>
+}

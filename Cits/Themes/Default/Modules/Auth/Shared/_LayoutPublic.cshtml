@@ -1,0 +1,99 @@
+﻿﻿@{
+    var debug = Html.IsDebugMode();
+    var cdn = @ViewBag.CdnUrl;
+}
+
+<!DOCTYPE html>
+
+<html lang="@ViewBag.Lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <link href="@cdn/lib/mdi/font/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/vuetify/dist/vuetify.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --main-bg: url('@cdn/lib/patterns/loginbg1.png');
+        }
+    </style>
+
+    <link href="@cdn/lib/components/app.css" rel="stylesheet" />
+
+
+    @RenderSection("styles", required: false)
+
+    <script src="@Url.GetUrl("Models")"></script>
+    <script src="@Url.GetUrl("Enums")"></script>
+    <script src="@Url.Action("CommonVariables", new { lang= ViewBag.Lang})"></script>
+    <script src="@cdn/lib/components/app.js"></script>
+    <script>
+        var version = '@ViewBag.Version';
+        var cdnUrl = '@cdn';
+        var lang = '@ViewBag.Lang';
+    </script>
+
+</head>
+<body>
+    <div id="loadingDiv" class="loading-container">
+        <div class="loading">
+            <div class="lds-hourglass"></div>
+        </div>
+    </div>
+
+    <div id="appDiv">
+        <v-app>
+            <v-main>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <v-app-bar app dense flat>
+
+                    </v-app-bar>
+                }
+                <div id="bgDiv" class="pos-rel z-0"></div>
+                <div data-app="true" class="w-100p h-100p main pos-rel z-1">
+                    @RenderBody()
+                </div>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="@cdn/lib/moment/moment-with-locales.min.js"></script>
+    <script src="@cdn/lib/axios/axios.min.js"></script>
+    @if (debug)
+    {
+        <script src="@cdn/lib/vue/dist/vue.js"></script>
+    }
+    else
+    {
+        <script src="@cdn/lib/vue/dist/vue.min.js"></script>
+    }
+    <script src="@cdn/lib/vuetify/dist/vuetify.min.js"></script>
+    <script src="@cdn/lib/http-vue-loader/src/httpVueLoader.min.js"></script>
+    <script src="@cdn/lib/v-mask/dist/v-mask.min.js"></script>
+    <script src="@cdn/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+
+    @RenderSection("scripts", required: false)
+
+    <script>
+        App.Init('#appDiv', function () {
+
+            Vue.use(VueMask.VueMaskPlugin);
+
+        }, function (application) {
+            @if (debug)
+            {
+                <text>application.debug = true;</text>
+            }
+            setTimeout(function () {
+                hideLoading();
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>

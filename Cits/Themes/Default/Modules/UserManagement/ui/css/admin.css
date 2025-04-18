@@ -1,0 +1,15 @@
+﻿
+
+fieldset.manage-group {
+    padding: 10px;
+    border: 1px solid #cbcbcb;
+    margin: 5px;
+}
+
+.search-input {
+    font-size: .9em;
+    padding: 0 5px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: none;
+}

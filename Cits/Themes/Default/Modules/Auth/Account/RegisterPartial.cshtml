@@ -1,0 +1,245 @@
+﻿﻿﻿﻿﻿@{
+    var settings = ViewBag.Settings as MC.WebApp.Module.Auth.SettingsViewModel;
+    var reg = settings.Register;
+}
+
+<v-card elevation="5" max-width="800">
+    <v-toolbar dark dense flat color="blue-grey darken-4">
+        <v-toolbar-title>@Html.Localize("Kullanıcı Kayıt")</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn small outlined href="/">
+            <v-icon>mdi-home</v-icon>
+            <span>@Html.Localize("Anasayfa")</span>
+        </v-btn>
+    </v-toolbar>
+    <v-card-text>
+        <v-form ref="frmRegister" v-on:submit.prevent>
+            <v-container>
+                <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field dense outlined hide-details
+                                              v-bind:type="'email'"
+                                              label="@Html.Localize(" E-Posta Adresiniz")"
+                                              placeholder="@Html.Localize(" E-Posta Adresiniz")"
+                                              v-bind="attrs"
+                                              v-on="on"
+                                              v-bind:rules="register.EMail_rules"
+                                              v-model="register.EMail">
+                                </v-text-field>
+                            </template>
+                            <span>@Html.Localize("Sisteme giriş bilgileriniz bu adrese gönderilecektir.")</span>
+                        </v-tooltip>
+                    </v-col>
+                    @if (reg.EnableNationality)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-select dense outlined hide-details
+                                              label="@Html.Localize(" Uyruğunuz")"
+                                              v-bind:items="countries"
+                                              item-text="CountryName"
+                                              item-value="CountryId"
+                                              v-bind="attrs"
+                                              v-on="on"
+                                              v-model="register.Nationality">
+                                    </v-select>
+                                </template>
+                                <span>@Html.Localize("Uyruk Bilginizi seçiniz. listede yok ise Diğer seçiniz")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableIdentityNumber)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field dense outlined hide-details
+                                                  label="@Html.Localize(" Kimlik Numaranız")"
+                                                  placeholder="@Html.Localize(" Kimlik Numaranız")"
+                                                  v-bind="attrs"
+                                                  v-on="on"
+                                                  v-bind:rules="register.IdentityNumber_rules"
+                                                  v-model="register.IdentityNumber">
+                                    </v-text-field>
+                                </template>
+                                <span>@Html.Localize("Başvuru için kimlik doğrulamanız bu bilgi üzerinden yapılacaktır")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableGender)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-select dense outlined hide-details
+                                              v-bind:items="genders"
+                                              item-text="Text"
+                                              item-value="Value"
+                                              label="@Html.Localize("Cinsiyetiniz")"
+                                              v-bind="attrs"
+                                              v-on="on"
+                                              v-model="register.Gender">
+                                    </v-select>
+                                </template>
+                                <span>@Html.Localize("Size hitap edebilmek için cinsiyetiniz")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableUsername)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field dense outlined hide-details
+                                                  label="@Html.Localize(" Adınız")"
+                                                  placeholder="@Html.Localize(" Adınız")"
+                                                  v-bind="attrs"
+                                                  v-on="on"
+                                                  v-bind:rules="register.Username_rules"
+                                                  v-model="register.Username">
+                                    </v-text-field>
+                                </template>
+                                <span>@Html.Localize("Adınız")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableUserSurname)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field dense outlined hide-details
+                                                  label="@Html.Localize(" Soyadınız")"
+                                                  placeholder="@Html.Localize(" Soyadınız")"
+                                                  v-bind="attrs"
+                                                  v-on="on"
+                                                  v-bind:rules="register.UserSurname_rules"
+                                                  v-model="register.UserSurname">
+                                    </v-text-field>
+                                </template>
+                                <span>@Html.Localize("Soyadınız")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableBirthDate)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field dense outlined hide-details
+                                                  label="@Html.Localize(" Doğum Tarihiniz")"
+                                                  placeholder="@Html.Localize(" Doğum Tarihiniz")"
+                                                  v-bind="attrs"
+                                                  v-on="on"
+                                                  v-mask="'##.##.####'"
+                                                  v-model="register.BirthDate">
+                                    </v-text-field>
+                                </template>
+                                <span>@Html.Localize("Doğum Tarihiniz")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableGsm)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field dense outlined hide-details
+                                                  label="@Html.Localize(" GSM Numaranız")"
+                                                  placeholder="@Html.Localize(" GSM Numaranız")"
+                                                  v-bind="attrs"
+                                                  v-on="on"
+                                                  v-bind:rules="register.Gsm_rules"
+                                                  v-mask="'### ### ## ##'"
+                                                  v-model="register.Gsm">
+                                    </v-text-field>
+                                </template>
+                                <span>@Html.Localize("Sizinle hızlı iletişime geçebilmek için GSM Numaranız")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableBirthPlaceCity)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-combobox dense outlined hide-details
+                                                v-bind:items="cities"
+                                                item-text="CityName"
+                                                item-value="CityId"
+                                                label="@Html.Localize(" Doğum Yeriniz (İl)")"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                v-model="selectedcity">
+                                    </v-combobox>
+                                </template>
+                                <span>@Html.Localize("Doğum yeriniz (İl)")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableBirthPlaceTown)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-combobox dense outlined hide-details
+                                                label="@Html.Localize(" Doğum Yeriniz (İlçe)")"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                v-model="register.BirthPlaceTown">
+                                    </v-combobox>
+                                </template>
+                                <span>@Html.Localize("Doğum yeriniz (İlçe)")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                    @if (reg.EnableAddress)
+                    {
+                        <v-col cols="12" sm="6" md="6">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-textarea dense outlined hide-details no-resize
+                                                rows="4"
+                                                label="@Html.Localize("İletişim Adresiniz")"
+                                                placeholder="@Html.Localize("İletişim Adresiniz")"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                v-bind:rules="register.Address_rules"
+                                                v-model="register.Address">
+                                    </v-textarea>
+                                </template>
+                                <span>@Html.Localize("Posta adresiniz. Resmi belgeler bu adrese yollanacaktır")</span>
+                            </v-tooltip>
+                        </v-col>
+                    }
+
+                </v-row>
+            </v-container>
+        </v-form>
+    </v-card-text>
+    <v-footer dark color="blue-grey darken-4">
+        <v-btn small outlined href="@Url.GetUrl("Account","Login",AuthModule.ThisModule.ModuleStarter.AreaName)">
+            <v-icon>mdi-login</v-icon>
+            <span>@Html.Localize("Giriş Sayfasına Dön")</span>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn small outlined v-on:click="cmd_register">
+            <v-icon>mdi-account-tie</v-icon>
+            <span>@Html.Localize("Kayıt Ol")</span>
+        </v-btn>
+    </v-footer>
+</v-card>
+
+

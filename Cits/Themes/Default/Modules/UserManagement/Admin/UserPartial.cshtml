@@ -1,0 +1,209 @@
+﻿﻿
+<v-card tile outlined elevation="2">
+    <v-overlay :absolute="true"
+               :opacity="0.90"
+               :value="user.loading"
+               :z-index="9"
+               color="green darken-2">
+        <div class="lds-hourglass"></div>
+    </v-overlay>
+    <v-row>
+        <v-col>
+            <v-data-table dense light single-expand
+                          elevation="1"
+                          item-key="UserId"
+                          v-bind:footer-props="Grid.footerProps"
+                          v-bind:items-per-page="Grid.itemsPerPage"
+                          v-bind:no-data-text="Grid.noDataText"
+                          v-bind:no-results-text="Grid.noResultText"
+                          v-bind:loading-text="Grid.loadingText"
+                          v-bind:headers="user.headers"
+                          v-bind:items="user.itemList"
+                          v-bind:show-expand="true"
+                          v-on:item-expanded="cmd_user_details"
+                          v-bind:loading="user.loading"
+                          v-bind:search="user.search">
+                <template v-slot:top>
+                    <v-system-bar dark color="green darken-2">
+                        <v-btn x-small icon v-on:click="cmd_load_users">
+                            <v-icon>mdi-refresh</v-icon>
+                        </v-btn>
+                        <v-divider inset vertical class="mx-2"></v-divider>
+                        <v-btn x-small color="primary" v-on:click="cmd_add_user">
+                            <v-icon small>mdi-beaker-plus</v-icon>
+                            @Html.Localize("Yeni Kullanıcı Ekle")
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <input type="text" class="search-input"
+                               v-model="user.search"
+                               placeholder="@Html.Localize("Ara")"
+                               autocomplete="off" />
+                    </v-system-bar>
+                </template>
+
+                <template slot="item.UserId" slot-scope="{item}">
+                    <span class="caption">{{item.UserId}}</span>
+                </template>
+                <template slot="item.UserGuid" slot-scope="{item}">
+                    <span class="caption">{{item.UserGuid}}</span>
+                </template>
+                <template slot="item.UserName" slot-scope="{item}">
+                    <span class="caption">{{item.UserName}}</span>
+                </template>
+                <template slot="item.IsActive" slot-scope="{item}">
+                    <span class="caption" v-if="item.IsActive">@Html.Localize("Evet")</span>
+                    <span class="caption" v-if="!item.IsActive">@Html.Localize("Hayır") : {{item.ActivationCode}}</span>
+                </template>
+
+                <template v-slot:item.fld_manage="{item}">
+                    <v-tooltip top color="green darken-2">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_edit_user(item)">
+                                <v-icon small color="yellow darken-2">
+                                    mdi-pencil
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Düzenle")</span>
+                    </v-tooltip>
+                    <v-tooltip top color="green darken-2">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn x-small text class="mx-1"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                   v-on:click="cmd_delete_user(item)">
+                                <v-icon small color="red darken-2">
+                                    mdi-delete
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>@Html.Localize("Sil")</span>
+                    </v-tooltip>
+                </template>
+
+                <template v-slot:expanded-item="ei">
+                    <td v-bind:colspan="ei.headers.length" class="px-0 py-0">
+                        <v-container fluid>
+                            <v-row>
+                                <v-col></v-col>
+                                <v-col cols="auto">
+                                    <v-simple-table dense>
+                                        <template v-slot:default>
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left">
+                                                        @Html.Localize("Grup Adı")
+                                                    </th>
+                                                    <th class="text-cleft">
+                                                        @Html.Localize("Üye")
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(ug,i) in user.detailItems" :key="i">
+                                                    <td>{{ ug.GroupName }}</td>
+                                                    <td>
+                                                        <v-checkbox hide-details dense
+                                                                    color="primary"
+                                                                    v-model="ug.Member" />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </template>
+                                    </v-simple-table>
+                                </v-col>
+                                <v-col></v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col></v-col>
+                                <v-col cols="auto">
+                                    <v-btn tile small outlined color="primary" v-on:click="cmd_user_details_save">
+                                        <v-icon left>mdi-content-save</v-icon>
+                                        @Html.Localize("Kaydet")
+                                    </v-btn>
+                                </v-col>
+                                <v-col></v-col>
+                            </v-row>
+                        </v-container>
+                    </td>
+                </template>
+
+            </v-data-table>
+        </v-col>
+    </v-row>
+</v-card>
+<v-dialog scrollable transition="dialog-top-transition" max-width="600" v-model="user.editMode">
+    <v-card>
+        <v-system-bar dark color="green darken-2">
+            <span v-if="!user.editItem.editmode">@Html.Localize("Yeni Kullanıcı Ekle")</span>
+            <span v-if="user.editItem.editmode">@Html.Localize("Kullanıcı Düzenle")</span>
+            <v-spacer></v-spacer>
+            <v-btn text small v-on:click="user.editMode = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-system-bar>
+        <v-card-text>
+            <v-form ref="frmUser" v-on:submit.prevent v-model="user.editItem.isvalid">
+                <v-container fluid>
+                    <v-row>
+                        <v-col>
+                            <v-text-field counter dense outlined
+                                          label="@Html.Localize("Kullanıcı Adı")"
+                                          autocomplete="new-user"
+                                          v-bind:rules="user.editItem.UserName_rules"
+                                          v-model="user.editItem.UserName">
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="auto">
+
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-text-field counter dense outlined
+                                          label="@Html.Localize("Kullanıcı Şifresi")"
+                                          autocomplete="new-password"
+                                          :append-icon="user.editItem.ShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                          v-bind:rules="user.editItem.UserPassword_rules"
+                                          v-bind:type="user.editItem.ShowPassword ? 'text' : 'password'"
+                                          v-on:click:append="user.editItem.ShowPassword = !user.editItem.ShowPassword"
+                                          v-model="user.editItem.UserPassword">
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="auto">
+
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-checkbox hide-details dense
+                                        label="@Html.Localize("Aktif")"
+                                        color="primary"
+                                        v-model="user.editItem.IsActive" />
+                        </v-col>
+                        <v-col cols="auto">
+                            
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+
+                        </v-col>
+                        <v-col cols="auto">
+                            <v-btn tile small outlined color="primary" v-on:click="cmd_save_user">
+                                <v-icon left>mdi-content-save</v-icon>
+                                @Html.Localize("Kaydet")
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-form>
+        </v-card-text>
+    </v-card>
+</v-dialog>
+
+
+

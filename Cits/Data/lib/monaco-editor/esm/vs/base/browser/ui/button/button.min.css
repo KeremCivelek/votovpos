@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v5.2.4.
+ * Original file: /npm/monaco-editor@0.33.0/esm/vs/base/browser/ui/button/button.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.monaco-text-button{box-sizing:border-box;display:flex;width:100%;padding:4px;text-align:center;cursor:pointer;justify-content:center;align-items:center}.monaco-text-button:focus{outline-offset:2px!important}.monaco-text-button:hover{text-decoration:none!important}.monaco-button.disabled,.monaco-button.disabled:focus{opacity:.4!important;cursor:default}.monaco-text-button>.codicon{margin:0 .2em;color:inherit!important}.monaco-button-dropdown{display:flex;cursor:pointer}.monaco-button-dropdown>.monaco-dropdown-button{margin-left:1px}.monaco-description-button{flex-direction:column}.monaco-description-button .monaco-button-label{font-weight:500}.monaco-description-button .monaco-button-description{font-style:italic}.monaco-description-button .monaco-button-description,.monaco-description-button .monaco-button-label{display:flex;justify-content:center;align-items:center}.monaco-description-button .monaco-button-description>.codicon,.monaco-description-button .monaco-button-label>.codicon{margin:0 .2em;color:inherit!important}
+/*# sourceMappingURL=/sm/7a249cc97a18565b11f7382947186af2836dd60cfc73e9fd68aab0918e3d6289.map */

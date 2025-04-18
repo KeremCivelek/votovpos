@@ -1,0 +1,165 @@
+﻿﻿@{
+    var debug = Html.IsDebugMode();
+    var cdn = @ViewBag.CdnUrl;
+    var user = User.GetUserInfo();
+}
+
+
+
+<!DOCTYPE html>
+
+<html lang="@ViewBag.Lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
+    <title>@ViewBag.Title</title>
+    <link href="@cdn/lib/font-awesome5/css/all.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/mdi/font/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/vuetify/dist/vuetify.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/components/app.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --app-bar-bg: url('@cdn/lib/patterns/appbarbg1.png');
+            --main-bg: url('@cdn/lib/patterns/dashboardbg1.png');
+        }
+    </style>
+    <link href="/Themes/Default/Modules/Admin/ui/css/general.css" rel="stylesheet" />
+    @RenderSection("styles", required: false)
+
+    <script src="@Url.Action("Urls",new { lang= ViewBag.Lang})"></script>
+    <script src="@Url.Action("Localization",new { lang= ViewBag.Lang})"></script>
+    <script src="@Url.GetUrl("Models")"></script>
+    <script src="@Url.GetUrl("Enums")"></script>
+    <script src="@Url.Action("CommonVariables", new { lang= ViewBag.Lang})"></script>
+
+    <script src="@cdn/lib/components/app.js"></script>
+    <script>
+        var version = '@ViewBag.Version';
+        var cdnUrl = '@cdn';
+        var lang = '@ViewBag.Lang';
+    </script>
+
+</head>
+<body>
+    <div id="loadingDiv" class="loading-container">
+        <div class="loading">
+            <div class="lds-hourglass"></div>
+        </div>
+    </div>
+    <div id="appDiv">
+        <v-app>
+            <v-system-bar app dark color="orange accent-4">
+                <div>
+                    @Html.GetModuleHelper("key_module_localization").Execute("GetSelector")
+                </div>
+
+                <v-spacer></v-spacer>
+                @if (User.HasPermission(AdminModule.PERMISSION_RESTART, ePermission.All))
+                {
+                    <v-btn small text v-on:click="RestartSystem">
+                        <v-icon small>mdi-restart</v-icon>
+                        <span class="d-none d-md-inline">
+                            @Html.Localize("Sistemi Yeniden Başlat")
+                        </span>
+                    </v-btn>
+                }
+                <v-divider vertical inset class="mx-2"></v-divider>
+                <v-btn small text v-on:click="Logout">
+                    <v-icon small>mdi-logout</v-icon>
+                    <span class="d-none d-md-inline">
+                        @Html.Localize("Çıkış")
+                    </span>
+                </v-btn>
+            </v-system-bar>
+            <v-app-bar app dense dark class="app-bar">
+                <v-btn small text v-on:click="Redirect('@Url.GetUrl("Default","Index",AdminModule.ThisModule.ModuleStarter.AreaName,new MCParam("lang",ViewBag.Lang))')">
+                    <v-icon small>mdi-home-circle</v-icon>
+                    <span class="d-none d-md-inline">
+                        @Html.Localize("Admin Ana Sayfa")
+                    </span>
+                </v-btn>
+                <v-divider vertical inset class="mx-2"></v-divider>
+                <v-btn small text v-on:click="Redirect('@Url.GetUrl("Default","Settings",AdminModule.ThisModule.ModuleStarter.AreaName,new MCParam("lang",ViewBag.Lang))')">
+                    <v-icon small>mdi-application-settings</v-icon>
+                    <span class="d-none d-md-inline">
+                        @Html.Localize("Ayarlar")
+                    </span>
+                </v-btn>
+                <v-divider vertical inset class="mx-2"></v-divider>
+                <v-btn small text v-on:click="Redirect('@Url.GetUrl("Default","Modules",AdminModule.ThisModule.ModuleStarter.AreaName,new MCParam("lang",ViewBag.Lang))')">
+                    <v-icon small>mdi-view-module-outline</v-icon>
+                    <span class="d-none d-md-inline">
+                        @Html.Localize("Modüller")
+                    </span>
+                </v-btn>
+                <v-spacer></v-spacer>
+                @RenderSection("appbar", required: false)
+            </v-app-bar>
+            <v-main>
+                <div data-app="true" class="w-100p h-100p main">
+                    @RenderBody()
+                </div>
+            </v-main>
+            <v-footer app padless outlined tile dark color="blue-grey darken-2">
+                <span>&nbsp;</span>
+                @if (Consts.DeveloperMode)
+                {
+                    <span class="caption red--text text--lighten-4">@Html.Localize("Dikkat!! Geliştirici Modu Açık")</span>
+                }
+            </v-footer>
+        </v-app>
+    </div>
+
+    <script src="@cdn/lib/moment/moment-with-locales.min.js"></script>
+    <script src="@cdn/lib/axios/axios.min.js"></script>
+    @if (debug)
+    {
+        <script src="@cdn/lib/vue/dist/vue.js"></script>
+    }
+    else
+    {
+        <script src="@cdn/lib/vue/dist/vue.min.js"></script>
+    }
+    <script src="@cdn/lib/vuetify/dist/vuetify.min.js"></script>
+    <script src="@cdn/lib/http-vue-loader/src/httpVueLoader.min.js"></script>
+    <script src="@cdn/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script>
+        App.Data.Grid = {
+            footerProps: {
+                'items-per-page-options': [10, 20, 30, 40, 50, -1],
+                'items-per-page-text': Lang.str_record_per_page,
+                'items-per-page-all-text': Lang.str_all
+            },
+            itemsPerPage: 10,
+            noDataText: Lang.str_no_data,
+            noResultText: Lang.str_no_result,
+            loadingText: Lang.str_loading,
+        }
+    </script>
+
+    <script src="/Themes/Default/Modules/Admin/ui/js/general.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+    <script>
+
+        App.Components['mc-dashboard-number'] = httpVueLoader('@cdn/lib/components/component_dashboard_number.vue?v=' + version);
+
+
+        App.Init('#appDiv', function () {
+
+        }, function (application) {
+            @if (debug)
+            {
+                <text>application.debug = true;</text>
+            }
+            setTimeout(function () {
+                hideLoading();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Yönetim Sayfası");
+    Layout = "~/Themes/Default/Modules/Admin/Shared/_Layout.cshtml";
+}
+
+<v-container fluid>
+    <v-row>
+        <v-col cols="12" sm="6" md="4" lg="3" xl="3">
+            <mc-dashboard-number height="120px"
+                                 background-color="#00796B"
+                                 border-color="#004D40"
+                                 value-color="#FBFBFB"
+                                 text-color="#FBFBFB"
+                                 text="@Html.Localize("Aktif Kullanıcı Sayısı")"
+                                 v-bind:value="@SessionManager.OnlineUsers.Count">
+            </mc-dashboard-number>
+        </v-col>
+        <v-col cols="12" sm="6" md="4" lg="3" xl="3">
+            <mc-dashboard-number height="120px"
+                                 background-color="#FF6D00"
+                                 border-color="#E65100"
+                                 value-color="#FBFBFB"
+                                 text-color="#FBFBFB"
+                                 text="@Html.Localize("Sistemin Diskte Kapladığı Alan (Gb)")"
+                                 v-bind:value="@ViewBag.TotalSize">
+            </mc-dashboard-number>
+        </v-col>
+        <v-col cols="12" sm="6" md="4" lg="3" xl="3">
+            <mc-dashboard-number height="120px"
+                                 background-color="#8D6E63"
+                                 border-color="#3E2723"
+                                 value-color="#FBFBFB"
+                                 text-color="#FBFBFB"
+                                 text="@Html.Localize("Aktif Modül Sayısı")"
+                                 v-bind:value="@ModuleManager.Modules.Count">
+            </mc-dashboard-number>
+        </v-col>
+        <v-col>
+
+        </v-col>
+    </v-row>
+    <v-divider class="my-3"></v-divider>
+    <v-row>
+        <v-col>
+            <v-simple-table dense>
+                <template v-slot:default>
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                DNS Adı
+                            </th>
+                            <th class="text-center">
+                                IP Adresi
+                            </th>
+                            <th class="text-center">
+                                Son Ziyaret ettiği URL
+                            </th>
+                            <th class="text-center">
+                                Tarayıcı bilgileri
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ou in SessionManager.OnlineUsers.OrderByDescending(o => o.StartDate).Take(10).ToList())
+                        {
+                            <tr>
+                                <td>@ou.DnsName</td>
+                                <td>@ou.IpAddress</td>
+                                <td>@ou.LastVisitUrl</td>
+                                <td>@ou.Browser</td>
+                            </tr>
+                        }
+                    </tbody>
+                </template>
+            </v-simple-table>
+
+        </v-col>
+    </v-row>
+</v-container>
+

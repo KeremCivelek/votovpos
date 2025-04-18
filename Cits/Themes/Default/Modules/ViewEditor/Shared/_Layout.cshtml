@@ -1,0 +1,114 @@
+﻿﻿@{
+    var debug = Html.IsDebugMode();
+    var cdn = ViewBag.CdnUrl;
+    var user = User.GetUserInfo();
+}
+
+
+<!DOCTYPE html>
+
+<html lang="@ViewBag.Lang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
+    <title>@ViewBag.Title</title>
+    <link href="@cdn/lib/font-awesome5/css/all.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/mdi/font/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/vuetify/dist/vuetify.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="@cdn/lib/v-splitpanes2/dist/splitpanes.min.css" rel="stylesheet" />
+    <link data-name="vs/editor/editor.main" href="@cdn/lib/monaco-editor/min/vs/editor/editor.main.min.css" rel="stylesheet" />
+
+
+    <link href="@cdn/lib/components/app.css" rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
+
+    <script src="@Url.Action("Urls",new { lang= ViewBag.Lang})"></script>
+    <script src="@Url.Action("Localization",new { lang= ViewBag.Lang})"></script>
+    <script src="@Url.GetUrl("Models")"></script>
+    <script src="@Url.GetUrl("Enums")"></script>
+    <script src="@Url.Action("CommonVariables", new { lang= ViewBag.Lang})"></script>
+
+    <script src="@cdn/lib/components/app.js"></script>
+    <script>
+        var version = '@ViewBag.Version';
+        var cdnUrl = '@cdn';
+        var lang = '@ViewBag.Lang';
+    </script>
+
+</head>
+<body>
+    <div id="loadingDiv" class="loading-container">
+        <div class="loading">
+            <div class="lds-hourglass"></div>
+        </div>
+    </div>
+
+    <div id="appDiv">
+        <v-app>
+            <v-main>
+                <div data-app="true" class="w-100p h-100p main">
+                    @RenderBody()
+                </div>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="@cdn/lib/moment/moment-with-locales.min.js"></script>
+    <script src="@cdn/lib/axios/axios.min.js"></script>
+    @if (debug)
+    {
+        <script src="@cdn/lib/vue/dist/vue.js"></script>
+    }
+    else
+    {
+        <script src="@cdn/lib/vue/dist/vue.min.js"></script>
+    }
+    <script src="@cdn/lib/vuetify/dist/vuetify.min.js"></script>
+    <script src="@cdn/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="@cdn/lib/v-splitpanes2/dist/splitpanes.umd.min.js"></script>
+    <script>var require = { paths: { 'vs': '@cdn/lib/monaco-editor/min/vs' } };</script>
+    <script src="@cdn/lib/monaco-editor/min/vs/loader.min.js"></script>
+    <script src="@cdn/lib/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="@cdn/lib/monaco-editor/min/vs/editor/editor.main.min.js"></script>
+
+
+    <script>
+        App.Data.Grid = {
+            footerProps: {
+                'items-per-page-options': [10, 20, 30, 40, 50, -1],
+                'items-per-page-text': Lang.str_record_per_page,
+                'items-per-page-all-text': Lang.str_all
+            },
+            itemsPerPage: 10,
+            noDataText: Lang.str_no_data,
+            noResultText: Lang.str_no_result,
+            loadingText: Lang.str_loading,
+        }
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+
+    <script>
+
+        App.Init('#appDiv', function () {
+
+            Vue.component('splitpanels', splitpanes.Splitpanes);
+            Vue.component('splitpanel', splitpanes.Pane);
+
+        }, function (application) {
+            @if (debug)
+            {
+                <text>application.debug = true;</text>
+            }
+            setTimeout(function () {
+                hideLoading();
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>

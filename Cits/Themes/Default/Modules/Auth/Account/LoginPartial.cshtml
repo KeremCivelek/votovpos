@@ -1,0 +1,99 @@
+﻿﻿@{
+    var settings = ViewBag.Settings as MC.WebApp.Module.Auth.SettingsViewModel;
+    var returnUrl = ViewBag.ReturnUrl;
+}
+
+<v-form ref="frmLogin" v-on:submit.prevent>
+    
+    <v-card elevation="5" min-height="150">
+        <v-card-text>
+            <v-container fluid fill-height>
+                <v-layout row>
+                    <v-flex grow shrink>
+                        <v-row class="d-none d-md-flex">
+                            <v-col cols="auto">
+                                <v-img contain src="/Themes/Default/Modules/Auth/UI/img/users.png"
+                                       max-height="250"
+                                       max-width="250">
+                                </v-img>
+                            </v-col>
+                        </v-row>
+                    </v-flex>
+                    <v-flex grow shrink>
+                        <v-divider vertical class="mx-4 d-none d-md-flex"></v-divider>
+                    </v-flex>
+                    <v-flex>
+                        <v-row>
+                            <v-col class="text-center">
+                                <span class="text-h5">@Html.Localize("Kullanıcı Girişi")</span>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-text-field dense outlined hide-details
+                                              v-bind:rules="login.UserName_rules"
+                                              label="@Html.Localize("Kullanıcı Adı")"
+                                              placeholder="@Html.Localize("Kullanıcı Adı")"
+                                              v-model="login.UserName">
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-text-field dense outlined hide-details
+                                              v-bind:type="'password'"
+                                              v-bind:rules="login.Password_rules"
+                                              label="@Html.Localize("Şifre")"
+                                              placeholder="@Html.Localize("Şifre")"
+                                              v-model="login.Password">
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                @if (settings.SystemAuth.RememberMe)
+                                {
+                                    <v-checkbox dense hide-details
+                                                label="@Html.Localize("Beni Hatırla")"
+                                                color="info"
+                                                v-model="login.RememberMe">
+                                    </v-checkbox>
+                                }
+                            </v-col>
+                            <v-col cols="auto">
+                                <v-btn outlined tile color="primary" v-on:click="cmd_login">
+                                    <v-icon>mdi-login</v-icon>
+                                    @Html.Localize("Giriş Yap")
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+            <v-card-actions>
+                <v-row>
+                    <v-col cols="auto">
+                        @if (settings.SystemAuth.Register)
+                        {
+                            <v-btn x-small text href="@Url.GetUrl("Account","Register",AuthModule.ThisModule.ModuleStarter.AreaName)">
+                                <v-icon>mdi-account-tie</v-icon>
+                                @Html.Localize("Kayıt Ol")
+                            </v-btn>
+                        }
+                    </v-col>
+                    <v-col></v-col>
+                    <v-col cols="auto">
+                        @if (settings.SystemAuth.ForgotPassword)
+                        {
+                            <v-btn x-small text href="@Url.GetUrl("Account","ForgotPassword",AuthModule.ThisModule.ModuleStarter.AreaName)">
+                                <v-icon>mdi-lock-question</v-icon>
+                                @Html.Localize("Şifremi Unuttum")
+                            </v-btn>
+                        }
+                    </v-col>
+                </v-row>
+            </v-card-actions>
+        </v-card-text>
+    </v-card>
+</v-form>
+

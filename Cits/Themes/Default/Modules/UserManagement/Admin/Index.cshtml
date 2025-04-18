@@ -1,0 +1,29 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Kullanıcı,Grup,Rol ve Yetki Yönetimi");
+    Layout = "~/Themes/Default/Modules/UserManagement/Shared/_Layout.cshtml";
+}
+
+<v-container fluid>
+    <v-row>
+        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+            @Html.GetRenderedPartial("RolePartial", null)
+        </v-col>
+        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+            @Html.GetRenderedPartial("GroupPartial", null)
+        </v-col>
+    </v-row>
+    <v-row>
+        <v-col>
+            @Html.GetRenderedPartial("UserPartial", null);
+        </v-col>
+    </v-row>
+</v-container>
+
+@section styles{
+    <link href="/Themes/Default/Modules/UserManagement/ui/css/admin.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="/Themes/Default/Modules/UserManagement/ui/js/admin.js"></script>
+}

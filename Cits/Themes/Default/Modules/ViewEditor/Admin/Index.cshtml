@@ -1,0 +1,111 @@
+﻿﻿
+@{
+    ViewBag.Title = Html.Localize("Görünüm Editörü");
+    Layout = "~/Themes/Default/Modules/ViewEditor/Shared/_Layout.cshtml";
+}
+
+<v-container fluid fill-height>
+    <v-overlay :absolute="true"
+               :opacity="0.9"
+               :value="loading"
+               :z-index="2"
+               color="blue-grey darken-2">
+        <div class="lds-hourglass"></div>
+    </v-overlay>
+    <v-layout column>
+        <v-flex class="grow-shrink-0">
+            <v-toolbar dense flat dark color="blue-grey">
+                <v-toolbar-title>@Html.Localize("Görünüm Editörü") <span v-if="views.selected">- {{views.selected.ViewCodeName}}</span></v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-divider inset vertical class="mx-2"></v-divider>
+                <v-btn small pill color="blue-grey darken-2"
+                       v-bind:disabled="!views.selected.ViewId"
+                       v-on:click="cmd_restore_view">
+                    <v-icon left>mdi-backup-restore</v-icon>
+                    @Html.Localize("Orjinale Dön")
+                </v-btn>
+                <v-divider inset vertical class="mx-2"></v-divider>
+                <v-btn small pill color="blue-grey darken-4"
+                       v-bind:disabled="!views.selected.ViewId"
+                       v-on:click="cmd_save_view">
+                    <v-icon left>mdi-content-save</v-icon>
+                    @Html.Localize("Kaydet")
+                </v-btn>
+            </v-toolbar>
+        </v-flex>
+        <v-flex>
+            <splitpanels ref="pnl" class="default-theme">
+                <splitpanel size="20" min-size="20" max-size="50">
+                    <v-card tile outlined class="h-100p overflow-y-auto">
+
+                        <v-card-text>
+                            <v-row>
+                                <v-col>
+                                    <v-select dense outlined hide-details
+                                              label="@Html.Localize("Tema")"
+                                              item-text="Text"
+                                              item-value="Value"
+                                              v-bind:items="themes.items"
+                                              v-bind:loading="themes.loading"
+                                              v-model="themes.selected">
+                                    </v-select>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-select dense outlined hide-details
+                                              label="@Html.Localize("Modül")"
+                                              item-text="Text"
+                                              item-value="Value"
+                                              v-bind:items="modules.items"
+                                              v-bind:loading="modules.loading"
+                                              v-model="modules.selected">
+                                    </v-select>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-list dense>
+                                        <v-list-item v-for="v in views.items"
+                                                     v-bind:key="v.ViewId"
+                                                     v-on:click="cmd_edit_view(v)">
+                                            <v-list-item-icon>
+                                                <v-icon left>mdi-file-eye-outline</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-title>
+                                                {{v.ViewCodeName}}
+                                            </v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                </splitpanel>
+                <splitpanel>
+                    <div class="w-100p h-100p" ref="editor">
+
+                    </div>
+                </splitpanel>
+            </splitpanels>
+        </v-flex>
+        <v-flex class="grow-shrink-0">
+            &nbsp;
+        </v-flex>
+    </v-layout>
+</v-container>
+
+
+
+@section styles{
+    <link href="/Themes/Default/Modules/ViewEditor/ui/css/admin.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="/Themes/Default/Modules/ViewEditor/ui/js/admin.js"></script>
+}

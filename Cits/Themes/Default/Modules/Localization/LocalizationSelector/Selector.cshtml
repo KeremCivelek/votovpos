@@ -1,0 +1,19 @@
+﻿﻿@model List<LanguageSelectorModel>
+
+
+<div>
+    @if (Model != null)
+    {
+        foreach (var l in Model)
+        {
+            <a href="@l.Url"><span class="@l.LanguageFlag"></span> @l.LanguageName</a>
+            <span>
+                &nbsp;&nbsp;
+            </span>
+        }
+    }
+</div>
+
+
+
+

@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v4.2.3.
+ * Original file: /npm/monaco-editor@0.27.0/esm/vs/editor/contrib/codelens/codelensWidget.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.monaco-editor .codelens-decoration{overflow:hidden;display:inline-block;text-overflow:ellipsis;white-space:nowrap}.monaco-editor .codelens-decoration>a,.monaco-editor .codelens-decoration>span{user-select:none;-webkit-user-select:none;-ms-user-select:none;white-space:nowrap;vertical-align:sub}.monaco-editor .codelens-decoration>a{text-decoration:none}.monaco-editor .codelens-decoration>a:hover{cursor:pointer}.monaco-editor .codelens-decoration .codicon{vertical-align:middle;color:currentColor!important}.monaco-editor .codelens-decoration>a:hover .codicon::before{cursor:pointer}@keyframes fadein{0%{opacity:0;visibility:visible}100%{opacity:1}}.monaco-editor .codelens-decoration.fadein{animation:fadein .1s linear}
+/*# sourceMappingURL=/sm/e7c50ec48f9eead50fba8bec76f568df341d89d8bab856b85459331d3c029929.map */

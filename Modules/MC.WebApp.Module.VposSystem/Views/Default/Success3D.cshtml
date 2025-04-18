@@ -1,0 +1,8 @@
+﻿@model Payment3DResponseViewModel
+@{
+    ViewBag.Title = "Success3D";
+    Layout = "~/Views/Shared/_LayoutPublic.cshtml";
+}
+
+<component-payment-response v-bind:Status="1" Request="@Model.MD" Order="@Model.OrderId" Message="@Model.ErrMsg">
+</component-payment-response>

@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v5.2.4.
+ * Original file: /npm/monaco-editor@0.33.0/esm/vs/editor/standalone/browser/inspectTokens/inspectTokens.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.monaco-editor .tokens-inspect-widget{z-index:50;user-select:text;-webkit-user-select:text;-ms-user-select:text;padding:10px}.tokens-inspect-separator{height:1px;border:0}.monaco-editor .tokens-inspect-widget .tm-token{font-family:var(--monaco-monospace-font)}.monaco-editor .tokens-inspect-widget .tm-token-length{font-weight:400;font-size:60%;float:right}.monaco-editor .tokens-inspect-widget .tm-metadata-table{width:100%}.monaco-editor .tokens-inspect-widget .tm-metadata-value{font-family:var(--monaco-monospace-font);text-align:right}.monaco-editor .tokens-inspect-widget .tm-token-type{font-family:var(--monaco-monospace-font)}
+/*# sourceMappingURL=/sm/59f0bde05da0dd51aa5f95f066cbe59dfe1e72b061fe0ce5bc0b19f9c1d7ba49.map */
